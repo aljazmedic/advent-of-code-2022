@@ -114,10 +114,11 @@ def read_test_case():
                 if n != 1:
                     if n == 0:
                         print("Cannot find test automatically")
+                        time.sleep(1)
+                        return 1
                     if n > 1:
                         print("Found more than one test")
-                    time.sleep(1)
-                    return 1
+                        print("Taking first one.")
                 d = d.split('<pre><code>')[1]
                 d = d.split('</code></pre>')[0].strip()
                 wf.write(d)
