@@ -49,11 +49,11 @@ def fread_split(fname, sep="\n", strip=True, mode='r', encoding='utf-8', buffer_
             yield d.strip() if strip else d
 
 
-def _do_split(data: str, arg: Union[str, float, int], strip=True) -> Iterable[str]:
+def _do_split(data: str, arg: Union[str, float, int, callable], strip=True) -> Iterable[str]:
     # Performs a split on data given a separator. It can be percent/absolute or a string.
     if isinstance(arg, str):
         d = data.split(arg)
-    else:
+    elif isinstance(arg, (float, int)):
         l = len(data)
         if isinstance(arg, float):
             arg = round(l * arg)
@@ -61,8 +61,12 @@ def _do_split(data: str, arg: Union[str, float, int], strip=True) -> Iterable[st
             d = [data]
         else:
             d = data[:arg], data[arg:]
+    elif callable(arg):
+        return (arg(data))
+
     if strip:
         d = map(str.strip, d)
+
     return list(d)
 
 
@@ -86,8 +90,8 @@ def rsplit(*sep, data: str = None, fname=None, mode='r', strip=True, encoding='u
 
     # Then recursively
     def _rec_rsplit(sep, data: str, strip: bool):
-        if len(sep) == 0:
-            return data
+        if len(sep) == 1:
+            return _do_split(data, sep[0], strip=strip)
         return [_rec_rsplit(sep[1:], data=d, strip=strip) for d in _do_split(data, sep[0], strip=strip)]
 
     s1 = (_rec_rsplit(sep[1:], data=d, strip=strip) for d in s1)

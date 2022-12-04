@@ -34,11 +34,11 @@ def overlap(a1, a2, b1, b2):
     return False
 
 
-for e in rsplit('\n', ',', '-', fname=fname):
-    # print(e)
+for e in rsplit('\n', ',', '-', int, fname=fname):
+    print(e)
     r1, r2 = e
-    a1, a2 = map(int, r1)
-    b1, b2 = map(int, r2)
+    a1, a2 = r1
+    b1, b2 = r2
     if subrange(a1, a2, b1, b2):
         s1 += 1
         s2 += 1
