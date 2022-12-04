@@ -9,10 +9,6 @@ l = []
 
 
 def subrange(a1, a2, b1, b2):
-    if b1 > b2:
-        return False
-    if a1 > a2:
-        return False
     if a1 <= b1 and b2 <= a2:
         return True
     if b1 <= a1 and a2 <= b2:
@@ -20,18 +16,8 @@ def subrange(a1, a2, b1, b2):
     return False
 
 
-def overlap(a1, a2, b1, b2):
-    if b1 > b2 or a1 > a2:
-        return False
-    if a1 <= b1 and b1 <= a2:
-        return True
-    if a1 <= b2 and b2 <= a2:
-        return True
-    if b1 <= a1 and a1 <= b2:
-        return True
-    if b1 <= a2 and a2 <= b2:
-        return True
-    return False
+def disjoint(a1, a2, b1, b2):
+    return a2 < b1 or b2 < a1
 
 
 for e in rsplit('\n', ',', '-', int, fname=fname):
@@ -41,8 +27,7 @@ for e in rsplit('\n', ',', '-', int, fname=fname):
     b1, b2 = r2
     if subrange(a1, a2, b1, b2):
         s1 += 1
-        s2 += 1
-    elif subrange(a1, b2, b1, a2):
+    if not disjoint(a1, a2, b1, b2):
         s2 += 1
 
 print(s1)
