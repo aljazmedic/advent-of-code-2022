@@ -99,6 +99,11 @@ def rsplit(*sep, data: str = None, fname=None, mode='r', strip=True, encoding='u
 def read_test_case():
     test_exists = os.path.exists('test.txt')
     ins_exists = os.path.exists('INSTRUCTIONS.md')
+    if test_exists:
+        # Check if test.txt is empty
+        with open('test.txt', 'r') as rf:
+            if not rf.read():
+                test_exists = False
     if not test_exists and ins_exists:
         print("Generating test.txt")
         with open('test.txt', 'w') as wf:
