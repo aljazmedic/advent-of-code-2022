@@ -15,23 +15,6 @@ move_packets1(A, B, N, A2, B2) :-
     move_packets1(A1, B1, N1, A2, B2).
 
 
-move_packets2(A, B, 0, A, B).
-move_packets2(A, B, N, A2, B2) :-
-    N>=1,
-    length(A, La1),
-    % if A has length N, append A to B
-    La1#=N,
-    append(A, B, B2),
-    A2=[].
-
-move_packets2([AH|A1], B, N, [AH|A2], B2) :-
-    N>=1,
-    length([AH|A1], La1),
-    % if A is bigger then N, recursively move packets
-    La1#>N,
-    N1 is N-1,
-    move_packets2(A1, B, N1, A2, B2).
-
 otherwise_same([], [], _, _).
 otherwise_same([H|A], [H|B], N, M) :-
     N1 is N-1,
@@ -45,20 +28,15 @@ otherwise_same([_|A], [_|B], 1, M) :-
 otherwise_same([_|A], [_|B], N, 1) :-
     N1 is N-1,
     otherwise_same(A, B, N1, 0).
-
+execute_move(S, [], S).
 execute_move(Storage1, [NumPackets, IndexA, IndexB], Storage2) :-
-    (   nth1(IndexA, Storage1, A),
-        nth1(IndexB, Storage1, B),
-        move_packets1(A, B, NumPackets, A2, B2),
-        nth1(IndexA, Storage2, A2),
-        nth1(IndexB, Storage2, B2),
+    nth1(IndexA, Storage1, A),
+    nth1(IndexB, Storage1, B),
+    move_packets1(A, B, NumPackets, A2, B2),
+    nth1(IndexA, Storage2, A2),
+    nth1(IndexB, Storage2, B2),
         % lists must be otherwise the same
-        otherwise_same(Storage1, Storage2, IndexA, IndexB)
-    ;   IndexA=IndexB,
-        nth1(IndexA, Storage2, A),
-        length(A, LengthA),
-        LengthA>NumPackets
-    ).
+    otherwise_same(Storage1, Storage2, IndexA, IndexB).
 
 
 

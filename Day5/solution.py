@@ -26,7 +26,6 @@ for line in b.strip().splitlines():
     #take_off = take_off[::-1]
     bins[b-1].extend(take_off)
 
-
 print(bins)
 s = ''.join([x[-1] for x in bins])
 print(s)
