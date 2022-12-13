@@ -1,0 +1,6 @@
+__pycache__
+.vscode
+.vscode-test
+base.py
+test.txt
+INSTRUCTIONS.md
